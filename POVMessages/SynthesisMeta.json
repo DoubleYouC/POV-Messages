@@ -1,0 +1,11 @@
+{
+  "Nickname": "POVMessages",
+  "Visibility": "Visible",
+  "OneLineDescription": "Attempts to patch the point of view using a json file with ordered replacements of specific texts. ",
+  "LongDescription": "Attempts to patch the point of view using a json file with ordered replacements of specific texts. ",
+  "PreferredAutoVersioning": "Default",
+  "RequiredMods": [],
+  "TargetedReleases": [
+    "Fallout4"
+  ]
+}
