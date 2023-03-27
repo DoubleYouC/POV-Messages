@@ -25,19 +25,31 @@ namespace POVMessages
             var POVMap = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonModString);
             Console.WriteLine($"Using POVMap.json");
 
-            //foreach (var eachGameSetting in state.LoadOrder.PriorityOrder.GameSetting().WinningOverrides())
-            //{
-            //    switch (eachGameSetting)
-            //    {
-            //        case IGameSettingString stringGetter:
-            //            if (stringGetter is null || stringGetter.Data is null) break;
-            //            Console.WriteLine(stringGetter.Data);
-            //            break;
-            //    }
-            //    //var gameSetting = state.PatchMod.GameSettings.GetOrAddAsOverride(eachGameSetting);
-            //}
-
             int i = 0;
+            foreach (var eachGameSetting in state.LoadOrder.PriorityOrder.GameSetting().WinningOverrides())
+            {
+                if (eachGameSetting is null || eachGameSetting.Type is null || eachGameSetting.Type.ToString() != "Mutagen.Bethesda.Fallout4.IGameSettingString") continue;
+                var gameSettingString = (IGameSettingStringGetter)eachGameSetting;
+                if (gameSettingString is null || gameSettingString.Data is null || gameSettingString.Data.ToString() == "" || gameSettingString.Data.ToString() == " ") continue;
+                string? originalString = gameSettingString.Data.ToString();
+                if (originalString is null || POVMap is null) continue;
+                string newString = originalString;
+                foreach (var key in POVMap.Keys)
+                {
+                    newString = newString.Replace(key, POVMap[key]);
+                }
+                if (newString == originalString) continue;
+                var gameSetting = state.PatchMod.GameSettings.GetOrAddAsOverride(eachGameSetting);
+                var newGameSettingString = (IGameSettingString)gameSetting;
+                newGameSettingString.Data = newString;
+                Console.WriteLine(eachGameSetting.EditorID);
+                Console.WriteLine($"Original string: {originalString}");
+                Console.WriteLine($"New string: {newString}");
+                i++;
+            }
+            Console.WriteLine($"Patched {i} game settings.");
+
+            i = 0;
             foreach (var eachMessage in state.LoadOrder.PriorityOrder.Message().WinningOverrides())
             {
                 string? description = eachMessage.Description.ToString();
