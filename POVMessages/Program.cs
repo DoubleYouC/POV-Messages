@@ -52,8 +52,8 @@ namespace POVMessages
 
                 var newMessage = state.PatchMod.Messages.GetOrAddAsOverride(eachMessage); 
                 newMessage.Description = description;
-                Console.WriteLine($"Old Description:{originalDescription}");
-                Console.WriteLine($"New Description:{description}");
+                Console.WriteLine($"Old Description: {originalDescription}");
+                Console.WriteLine($"New Description: {description}");
                 i++;
             }
             Console.WriteLine($"Patched {i} messages.");
